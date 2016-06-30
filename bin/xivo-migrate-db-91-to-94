@@ -1,0 +1,96 @@
+#!/bin/bash
+
+POSTGRESQL_DATA_PATH="/var/lib/postgresql/9.1/main"
+MIGRATION_LOG_FILE="/var/log/xivo-database-migration-91-to-94.log"
+
+export LC_ALL=$LANG
+
+if [ ! -d $POSTGRESQL_DATA_PATH ]; then
+	echo "ERROR: directory $POSTGRESQL_DATA_PATH doesn't exist."
+	echo "PostgreSQL is not installed."
+	exit 1
+fi
+
+prepare_configuration() {
+	echo "Saving postgresql 9.1 configuration files in /tmp/postgresql-9.1"
+	cp -r /etc/postgresql/9.1 /tmp/postgresql-9.1
+	cd /tmp
+	echo "Preparing configuration..."
+	echo "Downloading and installing postgresql..."
+	apt-get update >>$MIGRATION_LOG_FILE
+	DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql-9.4 postgresql-plpython-9.4 >>$MIGRATION_LOG_FILE
+}
+
+validate_configuration() {
+	echo "Validating configuration..."
+	local global_status=0
+	local versions="9.1 9.4"
+	for version in $versions; do
+		local pg_status=$(pg_lsclusters | grep "^$version" | awk '{print $4}')
+		if [ "$pg_status" == 'online' ]; then
+			local pg_port=$(pg_lsclusters | grep "^$version" | awk '{print $3}')
+			echo -e "\tpostgresql-$version:\t$pg_status (port: $pg_port)"
+			if [ "$version" == "9.1" -a "$pg_port" != "5432" ]; then
+				echo "ERROR: PostgreSQL $version running on bad port: $pg_port"
+			elif [ "$version" == "9.4" -a "$pg_port" != "5433" ]; then
+				echo "ERROR: PostgreSQL $version running on bad port: $pg_port"
+			fi
+		elif [ "$pg_status" == 'down' ]; then
+			echo -e "\tpostgresql-$version:\t$pg_status"
+			if [ $global_status -eq 0 ]; then
+				global_status=1
+			fi
+		else
+			echo -e "\tpostgresql-$version\tfailed"
+			global_status=2
+		fi
+	done
+	if [ $global_status -gt 0 ]; then
+		echo "Stopping upgrade..."
+		exit 1
+	fi
+}
+
+stop_services() {
+	echo "Stopping services..."
+	service cron stop >>$MIGRATION_LOG_FILE
+	pkill -f xivo-stat &>>$MIGRATION_LOG_FILE
+	pkill -f xivo-call-logs &>>$MIGRATION_LOG_FILE
+	service postgresql stop
+}
+
+migrate_db() {
+	echo "Migrating database..."
+	pg_dropcluster --stop 9.4 main
+	pg_upgradecluster --link -m upgrade -v 9.4 9.1 main | tee -a $MIGRATION_LOG_FILE
+	if [ $? -gt 0 ]; then
+		echo "ERROR: migration failed, see $MIGRATION_LOG_FILE for more info."
+		exit 1
+	fi
+	pg_dropcluster --stop 9.1 main
+}
+
+purge_old_database() {
+	echo "Purging old database..."
+	apt-get -y purge postgresql-9.1 postgresql-client-9.1 postgresql-plpython-9.1 >>$MIGRATION_LOG_FILE
+}
+
+start_services() {
+	echo "Starting services..."
+	service postgresql restart >>$MIGRATION_LOG_FILE
+	service cron start >>$MIGRATION_LOG_FILE
+}
+
+prepare_configuration
+validate_configuration
+stop_services
+migrate_db
+purge_old_database
+start_services
+
+cat <<EOF
+
+	*********** PostgreSQL migration from 9.1 to 9.4 successful ************
+
+EOF
+
