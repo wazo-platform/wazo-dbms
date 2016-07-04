@@ -1,0 +1,5 @@
+xivo-dbms (16.09~~) xivo-dev; urgency=medium
+
+  * Initial release.
+
+ -- Etienne Lessard <elessard@proformatique.com>  Thu, 30 Jun 2016 15:01:09 -0400
