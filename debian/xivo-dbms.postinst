@@ -12,7 +12,9 @@ is_pg_cluster_online() {
 update_timezone() {
     if ! timezone=$(pg_conftool -s 9.4 main postgresql.conf show timezone) || [ "$timezone" != 'localtime' ]; then
         pg_conftool 9.4 main postgresql.conf set timezone localtime
-        pg_ctlcluster 9.4 main reload
+        if is_pg_cluster_online 9.4; then
+            pg_ctlcluster 9.4 main reload || true
+        fi
     fi
 }
 
@@ -24,7 +26,7 @@ case "$1" in
             xivo-migrate-db-91-to-94
         fi
 
-		# the condition can't be more precise because the package did not exist previously
+        # the condition can't be more precise because the package did not exist previously
         if [ -z "$previous_version" ]; then
             update_timezone
         fi
