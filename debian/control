@@ -1,8 +1,7 @@
 Source: xivo-dbms
 Section: admin
 Priority: extra
-Maintainer: XiVO Dev Team <dev+pkg@proformatique.com>
-Uploaders: XiVO Builder Team <release@xivo.io>
+Maintainer: Wazo Maintainers <dev.wazo@gmail.com>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.6
 
@@ -15,9 +14,9 @@ Depends:
  postgresql-plpython-9.4
 Replaces: xivo-upgrade (<< 16.09~)
 Breaks: xivo-upgrade (<< 16.09~)
-Description: XiVO database management system
- XiVO is a system based on a powerful IPBX, to bring an easy to
+Description: Wazo database management system
+ Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
  .
  This package is responsible to install and upgrade the database management
- system (postgresql) used by XiVO.
+ system (postgresql) used by Wazo.
