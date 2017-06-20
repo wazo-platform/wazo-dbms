@@ -21,20 +21,14 @@ update_timezone() {
 case "$1" in
     configure)
         previous_version="$2"
-        echo "Check is_pg_cluster_online 9.1"
+
         if is_pg_cluster_online 9.1; then
-            echo "Starting script xivo-migrate-db-91-to-94..."
             xivo-migrate-db-91-to-94
-            echo "Script xivo-migrate-db-91-to-94 ended"
         fi
 
         # the condition can't be more precise because the package did not exist previously
-        echo "Check previous_version"
-        echo "$previous_version"
         if [ -z "$previous_version" ]; then
-            echo "Starting update_timezone..."
             update_timezone
-            echo "update_timezone ended"
         fi
     ;;
 

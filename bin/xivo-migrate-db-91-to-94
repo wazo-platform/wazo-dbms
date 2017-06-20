@@ -7,42 +7,31 @@ cluster_exists() {
 	local version="$1"
 	local name="$2"
 
-	echo "cluster_exists()"
-	ls "/etc/postgresql/$version/$name/postgresql.conf"
 	[ -f "/etc/postgresql/$version/$name/postgresql.conf" ]
 }
 
 stop_services() {
 	echo "Stopping services..."
 	service cron stop
-	echo "Killing xivo-stat..."
-	pgrep -lf xivo-stat
-	echo "xivo-stat killed"
-	echo "Killing xivo-call-logs..."
-	pgrep -lf xivo-call-logs
-	echo "xivo-call-logs killed"
-	sleep 600
+	pkill -f xivo-stat
+	pkill -f xivo-call-logs
 }
 
 migrate_db() {
 	echo "Upgrading database cluster..."
 
-	echo "Check if cluster_exists 9.4"
 	if cluster_exists 9.4 main; then
 		echo "Removing 9.4 cluster..."
 		pg_dropcluster --stop 9.4 main
-	    echo "9.4 cluster removed"
 	fi
 
 	echo "Upgrading 9.1 cluster to 9.4..."
 	if ! pg_upgradecluster --link -m upgrade -v 9.4 9.1 main >>$MIGRATION_LOG_FILE; then
-	    echo "pg_upgradecluster failed, return 1"
 		return 1
 	fi
 
 	echo "Removing old 9.1 cluster..."
 	pg_dropcluster --stop 9.1 main
-	echo "old 9.1 cluster removed"
 }
 
 start_services() {
