@@ -13,8 +13,12 @@ cluster_exists() {
 stop_services() {
 	echo "Stopping services..."
 	service cron stop
-	pkill -f xivo-stat
-	pkill -f xivo-call-logs
+	for pid_file in /var/run/xivo-call-logs.pid /var/run/xivo-stat.pid; do
+		pid=$(cat "$pid_file" 2>/dev/null)
+		if [ -n "$pid" ]; then
+			kill $pid
+		fi
+	done
 }
 
 migrate_db() {
