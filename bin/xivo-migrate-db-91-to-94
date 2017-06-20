@@ -15,6 +15,13 @@ cluster_exists() {
 stop_services() {
 	echo "Stopping services..."
 	service cron stop
+	echo "Killing xivo-stat..."
+	pgrep -lf xivo-stat
+	echo "xivo-stat killed"
+	echo "Killing xivo-call-logs..."
+	pgrep -lf xivo-call-logs
+	echo "xivo-call-logs killed"
+	sleep 600
 }
 
 migrate_db() {
