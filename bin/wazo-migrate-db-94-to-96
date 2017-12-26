@@ -1,0 +1,59 @@
+#!/bin/sh
+
+MIGRATION_LOG_FILE="/var/log/wazo-database-migration-94-to-96.log"
+
+cluster_exists() {
+	# similar check as in the postgresql-client-common package
+	local version="$1"
+	local name="$2"
+
+	[ -f "/etc/postgresql/$version/$name/postgresql.conf" ]
+}
+
+stop_services() {
+	echo "Stopping services..."
+	service cron stop
+	for pid_file in /var/run/xivo-call-logs.pid /var/run/xivo-stat.pid; do
+		pid=$(cat "$pid_file" 2>/dev/null)
+		if [ -n "$pid" ]; then
+			kill $pid
+		fi
+	done
+}
+
+migrate_db() {
+	echo "Upgrading database cluster..."
+
+	if cluster_exists 9.6 main; then
+		echo "Removing 9.6 cluster..."
+		pg_dropcluster --stop 9.6 main
+	fi
+
+	echo "Upgrading 9.4 cluster to 9.6..."
+	if ! pg_upgradecluster --link -m upgrade -v 9.6 9.4 main >>$MIGRATION_LOG_FILE; then
+		return 1
+	fi
+
+	echo "Removing old 9.4 cluster..."
+	pg_dropcluster --stop 9.4 main
+}
+
+start_services() {
+	echo "Starting services..."
+	service cron start
+}
+
+echo "Upgrading PostgreSQL cluster from 9.4 to 9.6..."
+
+stop_services
+migrate_db
+result=$?
+start_services
+
+if [ "$result" -eq 0 ]; then
+	echo "PostgreSQL cluster upgrade from 9.4 to 9.6 successful"
+else
+	echo "ERROR: upgrade failed, see $MIGRATION_LOG_FILE for more info."
+fi
+
+exit "$result"
