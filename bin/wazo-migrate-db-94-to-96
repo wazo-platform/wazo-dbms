@@ -1,6 +1,11 @@
 #!/bin/sh
 
 MIGRATION_LOG_FILE="/var/log/wazo-database-migration-94-to-96.log"
+export DEBIAN_FRONTEND=noninteractive
+
+install_postgresql_96() {
+	apt-get install -yq postgresql-9.6 postgresql-contrib-9.6
+}
 
 cluster_exists() {
 	# similar check as in the postgresql-client-common package
@@ -47,6 +52,7 @@ start_services() {
 
 echo "Upgrading PostgreSQL cluster from 9.4 to 9.6..."
 
+install_postgresql_96
 stop_services
 migrate_db
 result=$?
