@@ -19,6 +19,7 @@ stop_services() {
 			kill $pid
 		fi
 	done
+	systemctl stop mongooseim
 }
 
 migrate_db() {
@@ -40,6 +41,7 @@ migrate_db() {
 
 start_services() {
 	echo "Starting services..."
+	systemctl start mongooseim
 	service cron start
 }
 
