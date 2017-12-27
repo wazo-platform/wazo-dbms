@@ -35,6 +35,9 @@ migrate_db() {
 		pg_dropcluster --stop 9.6 main
 	fi
 
+	echo "Stopping 9.4 cluster..."
+	systemctl stop postgresql@9.4-main.service
+
 	echo "Upgrading 9.4 cluster to 9.6..."
 	if ! pg_upgradecluster --link -m upgrade -v 9.6 9.4 main >>$MIGRATION_LOG_FILE; then
 		return 1
