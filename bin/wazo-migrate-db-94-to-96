@@ -4,7 +4,7 @@ MIGRATION_LOG_FILE="/var/log/wazo-database-migration-94-to-96.log"
 export DEBIAN_FRONTEND=noninteractive
 
 install_postgresql_96() {
-	apt-get install -yq postgresql-9.6 postgresql-contrib-9.6
+	apt-get install -yq postgresql-9.6 postgresql-contrib-9.6 postgresql-plpython-9.6
 }
 
 cluster_exists() {
