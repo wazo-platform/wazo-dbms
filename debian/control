@@ -9,9 +9,9 @@ Package: xivo-dbms
 Architecture: all
 Depends:
  ${misc:Depends},
- postgresql-9.4 (= 9.4.15-0+deb8u1),
- postgresql-contrib-9.4,
- postgresql-plpython-9.4
+ postgresql-9.6,
+ postgresql-contrib-9.6,
+ postgresql-plpython-9.6
 Replaces: xivo-upgrade (<< 16.09~)
 Breaks: xivo-upgrade (<< 16.09~)
 Description: Wazo database management system
