@@ -9,7 +9,7 @@ Package: xivo-dbms
 Architecture: all
 Depends:
  ${misc:Depends},
- postgresql-9.6 (= 9.6.10-0+deb9u1),
+ postgresql-9.6 (= 9.6.11-0+deb9u1),
  postgresql-contrib-9.6,
  postgresql-plpython-9.6
 Replaces: xivo-upgrade (<< 16.09~)
