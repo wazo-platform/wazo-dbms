@@ -10,10 +10,10 @@ is_pg_cluster_online() {
 }
 
 update_timezone() {
-    if ! timezone=$(pg_conftool -s 9.6 main postgresql.conf show timezone) || [ "$timezone" != 'localtime' ]; then
-        pg_conftool 9.6 main postgresql.conf set timezone localtime
-        if is_pg_cluster_online 9.6; then
-            pg_ctlcluster 9.6 main reload || true
+    if ! timezone=$(pg_conftool -s 11 main postgresql.conf show timezone) || [ "$timezone" != 'localtime' ]; then
+        pg_conftool 11 main postgresql.conf set timezone localtime
+        if is_pg_cluster_online 11; then
+            pg_ctlcluster 11 main reload || true
         fi
     fi
 }
@@ -24,6 +24,10 @@ case "$1" in
 
         if is_pg_cluster_online 9.4; then
             wazo-migrate-db-94-to-96
+        fi
+
+        if is_pg_cluster_online 9.6; then
+            wazo-migrate-db-96-to-11
         fi
 
         # the condition can't be more precise because the package did not exist previously
