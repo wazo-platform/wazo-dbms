@@ -11,9 +11,9 @@ Problem:
 
   * a newer version of postgresql is available on the Debian mirrors
   * a newer version of Wazo daemon with database is available on the Wazo mirror
-  * someone run xivo-upgrade
+  * someone run wazo-upgrade
 
-  What can happens then is that during the xivo-upgrade:
+  What can happens then is that during the wazo-upgrade:
 
   * postgresql is unpacked (and the cluster is then stopped)
   * wazo daemon is unpackaged then configured, but it doesn't try to
@@ -21,7 +21,7 @@ Problem:
     running at this stage
   * postgresql is configured
 
-  So you find yourself at the end of the xivo-upgrade with an not-updated
+  So you find yourself at the end of the wazo-upgrade with an not-updated
   database schema, and this is not good.
 
 
