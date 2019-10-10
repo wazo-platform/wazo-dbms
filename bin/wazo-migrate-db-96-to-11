@@ -14,7 +14,7 @@ cluster_exists() {
 stop_services() {
 	echo "Stopping services..."
 	service cron stop
-	for pid_file in /var/run/xivo-call-logs.pid /var/run/xivo-stat.pid; do
+	for pid_file in /run/xivo-call-logs.pid /run/xivo-stat.pid; do
 		pid=$(cat "$pid_file" 2>/dev/null)
 		if [ -n "$pid" ]; then
 			kill $pid
