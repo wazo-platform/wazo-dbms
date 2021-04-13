@@ -30,3 +30,4 @@ Solution:
   * The postgresql package is cloned from debian mirror to wazo mirror
   * xivo-config provide a pinning configuration on postgresql to take postgresql from wazo mirror
   * Postgresql version is fixed in xivo-dbms to control the order of packages installation.
+
