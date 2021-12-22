@@ -1,12 +1,15 @@
-Source: xivo-dbms
+Source: wazo-dbms
 Section: admin
-Priority: extra
-Maintainer: Wazo Maintainers <dev.wazo@gmail.com>
+Priority: optional
+Maintainer: Wazo Maintainers <dev@wazo.community>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.6
 
-Package: xivo-dbms
+Package: wazo-dbms
 Architecture: all
+Provides: xivo-dbms
+Conflicts: xivo-dbms
+Replaces: xivo-dbms
 Depends:
  ${misc:Depends},
  postgresql-11,

@@ -1,3 +1,9 @@
+wazo-dbms (22.01~20211222.101612) wazo-dev-buster; urgency=medium
+
+  * Rename to wazo-dbms
+
+ -- Wazo Maintainers <dev+pkg@wazo.community>  Wed, 22 Dec 2021 10:16:12 -0500
+
 xivo-dbms (16.09~~) xivo-dev; urgency=medium
 
   * Initial release.

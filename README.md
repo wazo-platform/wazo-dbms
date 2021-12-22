@@ -1,11 +1,9 @@
-xivo-dbms
-=========
+# wazo-dbms
 
-xivo-dbms is a Debian package that is responsible to install and upgrade the
+wazo-dbms is a Debian package that is responsible to install and upgrade the
 database management system (postgresql) used by Wazo.
 
-Depend with postgresql
-======================
+# Depend with postgresql
 
 Problem:
 
@@ -28,5 +26,5 @@ Problem:
 Solution:
 
   * The postgresql package is cloned from debian mirror to wazo mirror
-  * xivo-config provide a pinning configuration on postgresql to take postgresql from wazo mirror
-  * Postgresql version is fixed in xivo-dbms to control the order of packages installation.
+  * wazo-config provide a pinning configuration on postgresql to take postgresql from wazo mirror
+  * Postgresql version is fixed in wazo-dbms to control the order of packages installation.
