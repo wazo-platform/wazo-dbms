@@ -44,6 +44,7 @@ migrate_db() {
 
 start_services() {
 	echo "Starting services..."
+	pg_ctlcluster 11 main start
 	service cron start
 }
 
