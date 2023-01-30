@@ -12,8 +12,8 @@ Conflicts: xivo-dbms
 Replaces: xivo-dbms
 Depends:
  ${misc:Depends},
- postgresql-11,
- postgresql-contrib-11
+ postgresql-13,
+ postgresql-contrib-13
 Description: Wazo database management system
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
