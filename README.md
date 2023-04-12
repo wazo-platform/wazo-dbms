@@ -1,30 +1,30 @@
 # wazo-dbms
 
-wazo-dbms is a Debian package that is responsible to install and upgrade the
-database management system (postgresql) used by Wazo.
+wazo-dbms is a Debian package that is responsible for installing and upgrading the
+database system (PostgreSQL) used by Wazo.
 
-# Depend with postgresql
+# Depending on PostgreSQL
 
 Problem:
 
-  * a newer version of postgresql is available on the Debian mirrors
-  * a newer version of Wazo daemon with database is available on the Wazo mirror
-  * someone run wazo-upgrade
+  * a newer version of PostgreSQL is available on the Debian mirrors
+  * a newer version of Wazo daemon which uses the database is available on the Wazo mirror
+  * someone runs wazo-upgrade
 
-  What can happens then is that during the wazo-upgrade:
+  What can happen then is that during the wazo-upgrade:
 
-  * postgresql is unpacked (and the cluster is then stopped)
-  * wazo daemon is unpackaged then configured, but it doesn't try to
-    update it's database schema since the postgresql cluster is not
+  * PostgreSQL is unpacked (and the cluster is then stopped)
+  * wazo daemon is unpacked and configured, but it doesn't try to
+    update its database schema since the PostgreSQL cluster is not
     running at this stage
-  * postgresql is configured
+  * PostgreSQL is configured
 
-  So you find yourself at the end of the wazo-upgrade with an not-updated
+  So you find yourself at the end of the wazo-upgrade with a non-upgraded
   database schema, and this is not good.
 
 
 Solution:
 
-  * The postgresql package is cloned from debian mirror to wazo mirror
-  * wazo-config provide a pinning configuration on postgresql to take postgresql from wazo mirror
-  * Postgresql version is fixed in wazo-dbms to control the order of packages installation.
+  * The PostgreSQL package is cloned from Debian mirror to Wazo mirror
+  * wazo-config provides a pinned version of PostgreSQL to take PostgreSQL from a wazo mirror
+  * PostgreSQL version is fixed in wazo-dbms to control the order of package installations.
