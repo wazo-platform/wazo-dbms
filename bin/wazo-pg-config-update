@@ -1,0 +1,9 @@
+#!/bin/sh
+
+POSTGRESQL_CONFIG='/etc/postgresql/13/main/postgresql.conf'
+
+sed -i -E "s/#?jit = (on|off)/jit = off/" "${POSTGRESQL_CONFIG}"
+
+if /usr/bin/wazo-pg-is-running; then
+  systemctl reload postgresql
+fi
