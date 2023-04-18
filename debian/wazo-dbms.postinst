@@ -38,6 +38,8 @@ case "$1" in
         if [ -z "$previous_version" ]; then
             update_timezone
         fi
+
+        /usr/bin/wazo-pg-config-update
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
