@@ -10,5 +10,5 @@ fi
 
 
 if /usr/bin/wazo-pg-is-running; then
-  systemctl reload postgresql
+  systemctl reload postgresql@13-main
 fi
