@@ -7,9 +7,6 @@ Standards-Version: 3.9.6
 
 Package: wazo-dbms
 Architecture: all
-Provides: xivo-dbms
-Conflicts: xivo-dbms
-Replaces: xivo-dbms
 Depends:
  ${misc:Depends},
  postgresql-13,
