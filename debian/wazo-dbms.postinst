@@ -3,19 +3,10 @@
 set -e
 
 is_pg_cluster_online() {
-    local version="$1"
+    version="$1"
 
     # pg_ctlcluster exit with 0 only if the specified cluster is running
     pg_ctlcluster "$version" main status >/dev/null 2>&1
-}
-
-update_timezone() {
-    if ! timezone=$(pg_conftool -s 13 main postgresql.conf show timezone) || [ "$timezone" != 'localtime' ]; then
-        pg_conftool 13 main postgresql.conf set timezone localtime
-        if is_pg_cluster_online 13; then
-            pg_ctlcluster 13 main reload || true
-        fi
-    fi
 }
 
 case "$1" in
@@ -36,17 +27,19 @@ case "$1" in
 
         # the condition can't be more precise because the package did not exist previously
         if [ -z "$previous_version" ]; then
-            update_timezone
-        fi
-
-        /usr/bin/wazo-pg-config-update
-
-        # apply changes to postgresql max_connections
-        if dpkg --compare-versions "${previous_version}" lt '24.11'; then
+            # apply changes from conf.d drop-in
             if is_pg_cluster_online 13; then
                 pg_ctlcluster 13 main restart
             fi
+        else
+            # apply changes to max_connections
+            if dpkg --compare-versions "${previous_version}" lt '24.11'; then
+                if is_pg_cluster_online 13; then
+                    pg_ctlcluster 13 main restart
+                fi
+            fi
         fi
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
