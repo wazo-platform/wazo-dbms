@@ -40,6 +40,13 @@ case "$1" in
         fi
 
         /usr/bin/wazo-pg-config-update
+
+        # apply changes to postgresql max_connections
+        if dpkg --compare-versions "${previous_version}" lt '24.11'; then
+            if is_pg_cluster_online 13; then
+                pg_ctlcluster 13 main restart
+            fi
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
