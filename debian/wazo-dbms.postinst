@@ -22,14 +22,6 @@ case "$1" in
     configure)
         previous_version="$2"
 
-        if is_pg_cluster_online 9.4; then
-            wazo-migrate-db-94-to-96
-        fi
-
-        if is_pg_cluster_online 9.6; then
-            wazo-migrate-db-96-to-11
-        fi
-
         if is_pg_cluster_online 11; then
             wazo-migrate-db-11-to-13
         fi
