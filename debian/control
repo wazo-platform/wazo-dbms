@@ -9,8 +9,8 @@ Package: wazo-dbms
 Architecture: all
 Depends:
  ${misc:Depends},
- postgresql-13,
- postgresql-contrib-13
+ postgresql-15,
+ postgresql-contrib-15
 Description: Wazo database management system
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
