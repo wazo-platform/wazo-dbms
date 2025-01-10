@@ -23,13 +23,6 @@ case "$1" in
             if is_pg_cluster_online 15; then
                 pg_ctlcluster 15 main restart
             fi
-        else
-            # apply changes to max_connections
-            if dpkg --compare-versions "${previous_version}" lt '24.11'; then
-                if is_pg_cluster_online 13; then
-                    pg_ctlcluster 13 main restart
-                fi
-            fi
         fi
 
     ;;
