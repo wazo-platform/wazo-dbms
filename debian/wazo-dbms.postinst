@@ -13,22 +13,15 @@ case "$1" in
     configure)
         previous_version="$2"
 
-        if is_pg_cluster_online 11; then
-            wazo-migrate-db-11-to-13
+        if is_pg_cluster_online 13; then
+            wazo-migrate-db-13-to-15
         fi
 
         # the condition can't be more precise because the package did not exist previously
         if [ -z "$previous_version" ]; then
             # apply changes from conf.d drop-in
-            if is_pg_cluster_online 13; then
-                pg_ctlcluster 13 main restart
-            fi
-        else
-            # apply changes to max_connections
-            if dpkg --compare-versions "${previous_version}" lt '24.11'; then
-                if is_pg_cluster_online 13; then
-                    pg_ctlcluster 13 main restart
-                fi
+            if is_pg_cluster_online 15; then
+                pg_ctlcluster 15 main restart
             fi
         fi
 
